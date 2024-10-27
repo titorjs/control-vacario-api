@@ -3,6 +3,7 @@ package com.titorjs.control_vacario_api.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,9 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    private String name;
+    private String lastname;
+    private LocalDate birth;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

@@ -28,15 +28,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/*/auth/**").permitAll()
-                        .requestMatchers("/api/*/users/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Política sin estado
-                )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)  // Filtro JWT*/
                 .build();
     }
 
