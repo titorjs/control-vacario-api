@@ -13,7 +13,7 @@ public class VacaStatus {
     @Column(name = "vaca_status_id")
     private Long id;
 
-    @Column(name = "vaca_status_desc", nullable = false)
+    @Column(name = "vaca_status_desc", nullable = false, unique = true)
     private String description;
 
     // Constructor vacío

@@ -67,4 +67,14 @@ public class VacaService {
                 .orElseThrow(() -> new RuntimeException("Vaca no encontrada"));
         vacaRepository.delete(vaca);
     }
+
+    public Vaca sellVaca(Long id) {
+        Vaca vaca = vacaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Vaca no encontrada"));
+
+        vaca.setStatus(vacaStatusRepository.findByDescription("VENDIDA")
+                .orElseThrow(() -> new RuntimeException("Estatus de VENDIDA no registrado en el sistema")));
+
+        return vaca;
+    }
 }

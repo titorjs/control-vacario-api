@@ -60,22 +60,12 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}/addRole")
-    public ResponseEntity<?> addRoleToUser(@PathVariable Long id, @RequestParam String role) {
-        try {
-            userService.addRoleToUser(id, role);
-            return ResponseEntity.ok("Rol añadido exitosamente");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     // Quitar rol a un usuario
-    @PutMapping("/{id}/removeRole")
+    @PutMapping("/{id}/updateRole")
     public ResponseEntity<?> removeRoleFromUser(@PathVariable Long id, @RequestParam String role) {
         try {
-            userService.removeRoleFromUser(id, role);
-            return ResponseEntity.ok("Rol eliminado exitosamente");
+            userService.updateRole(id, role);
+            return ResponseEntity.ok("Rol cambiado exitosamente");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

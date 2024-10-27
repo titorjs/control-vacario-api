@@ -23,7 +23,11 @@ public class VacaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Vaca> getVacaById(@PathVariable Long id) {
-        return ResponseEntity.ok(vacaService.getVacaById(id));
+        try{
+            return ResponseEntity.ok(vacaService.getVacaById(id));
+        } catch (RuntimeException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -38,10 +42,23 @@ public class VacaController {
         return ResponseEntity.ok(vacaService.updateVaca(id, vaca, request.getTypeId(), request.getStatusId()));
     }
 
+    @PutMapping("/sell/{id}")
+    public ResponseEntity<?> sellVaca(@PathVariable Long id) {
+        try{
+            return ResponseEntity.ok(vacaService.sellVaca(id));
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVaca(@PathVariable Long id) {
-        vacaService.deleteVaca(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteVaca(@PathVariable Long id) {
+        try{
+            vacaService.deleteVaca(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
 

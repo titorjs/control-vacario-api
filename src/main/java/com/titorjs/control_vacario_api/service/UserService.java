@@ -32,6 +32,8 @@ public class UserService {
             throw new RuntimeException("El usuario ya existe");
         }
 
+        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new RuntimeException("Rol no existe"));
+
         // Crear nuevo usuario
         User user = new User();
         user.setUsername(username);
@@ -39,11 +41,7 @@ public class UserService {
         user.setName(name);
         user.setLastname(lastname);
         user.setBirth(birth);
-
-        // Asignar rol al usuario
-        Role role = roleRepository.findByName(roleName).orElseThrow(() -> new RuntimeException("El rol no existe"));
-
-        user.setRoles(new HashSet<>(Set.of(role)));
+        user.setRole(role);
 
         // Guardar el usuario
         return userRepository.save(user);
@@ -59,31 +57,17 @@ public class UserService {
         return user.orElse(null);
     }
 
-    public void addRoleToUser(Long userId, String roleName) {
+    public void updateRole(Long userId, String roleName) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
-        if (!user.getRoles().contains(role)) {
-            user.getRoles().add(role);
+        if (!user.getRole().equals(role)) {
+            user.setRole(role);
             userRepository.save(user);  // Guardar los cambios en la base de datos
         } else {
             throw new RuntimeException("El usuario ya tiene este rol");
-        }
-    }
-
-    public void removeRoleFromUser(Long userId, String roleName) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-
-        if (user.getRoles().contains(role)) {
-            user.getRoles().remove(role);
-            userRepository.save(user);  // Guardar los cambios en la base de datos
-        } else {
-            throw new RuntimeException("El usuario no tiene este rol");
         }
     }
 }
