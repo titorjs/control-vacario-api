@@ -3,6 +3,7 @@ package com.titorjs.control_vacario_api.config;
 import com.titorjs.control_vacario_api.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -27,14 +29,14 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/*/auth/**").permitAll()
+                        .requestMatchers("/api/*/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Política sin estado
                 )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)  // Filtro JWT
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)  // Filtro JWT*/
                 .build();
     }
 
