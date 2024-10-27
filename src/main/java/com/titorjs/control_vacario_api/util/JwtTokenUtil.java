@@ -3,6 +3,7 @@ package com.titorjs.control_vacario_api.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,8 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
 
-    private String jwtSecret = "your_secret_key";  // Cambia esto por una clave más segura
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
