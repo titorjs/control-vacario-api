@@ -13,9 +13,9 @@ public class Producto {
     @Column(name = "producto_id")
     private Long productoId;
 
-    @Column(name = "producto_desc")
+    @Column(name = "producto_desc", nullable = false)
     private String productoDesc;
 
-    @Column(name = "producto_measur")
+    @Column(name = "producto_measur", nullable = false)
     private String productoMeasur;
 }

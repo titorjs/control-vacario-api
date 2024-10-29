@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "enfermedad")
@@ -27,5 +28,13 @@ public class Enfermedad {
 
     @Column(name = "enfermedad_end")
     private LocalDate enfermedadEnd;
+
+    @ManyToMany
+    @JoinTable(
+            name = "enfermedad_remedio",
+            joinColumns = @JoinColumn(name = "enfermedad_id"),
+            inverseJoinColumns = @JoinColumn(name = "remedio_id")
+    )
+    private Set<Remedio> remedios;
 }
 

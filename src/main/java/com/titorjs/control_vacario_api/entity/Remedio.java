@@ -15,17 +15,9 @@ public class Remedio {
     @Column(name = "remedio_id")
     private Long remedioId;
 
-    @Column(name = "remedio_name")
+    @Column(name = "remedio_name", nullable = false)
     private String remedioName;
 
     @Column(name = "remedio_desc")
     private String remedioDesc;
-
-    @ManyToMany
-    @JoinTable(
-            name = "enfermedad_remedio",
-            joinColumns = @JoinColumn(name = "remedio_id"),
-            inverseJoinColumns = @JoinColumn(name = "enfermedad_id")
-    )
-    private Set<Enfermedad> enfermedades;
 }
