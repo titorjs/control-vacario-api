@@ -2,6 +2,7 @@ package com.titorjs.control_vacario_api.controller;
 
 import com.titorjs.control_vacario_api.entity.Vaca;
 import com.titorjs.control_vacario_api.service.VacaService;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +38,13 @@ public class VacaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vaca> updateVaca(@PathVariable Long id, @RequestBody VacaRequest request) {
-        Vaca vaca = new Vaca(request.getCode(), request.getName(), request.getDescription(), null, null);
-        return ResponseEntity.ok(vacaService.updateVaca(id, vaca, request.getTypeId(), request.getStatusId()));
+    public ResponseEntity<?> updateVaca(@PathVariable Long id, @RequestBody VacaRequest request) {
+        try{
+            Vaca vaca = new Vaca(request.getCode(), request.getName(), request.getDescription(), null, null);
+            return ResponseEntity.ok(vacaService.updateVaca(id, vaca, request.getTypeId(), request.getStatusId()));
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/sell/{id}")
@@ -64,7 +69,9 @@ public class VacaController {
 
 @Data
 class VacaRequest {
+    @NotNull
     private String code;
+    @NotNull
     private String name;
     private String description;
     private Long typeId;
