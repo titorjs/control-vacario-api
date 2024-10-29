@@ -39,20 +39,20 @@ public class ProduccionDiariaController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getProduccionDiariaById(@PathVariable Long id) {
+    @GetMapping("/getBy")
+    public ResponseEntity<?> getProduccionDiariaById(@RequestBody ProduccionDiariaRequest pdr) {
         try{
-            return ResponseEntity.ok(produccionDiariaService.getById(id));
+            return ResponseEntity.ok(produccionDiariaService.getById(pdr.getVacaId(), pdr.getProduccionDate()));
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduccionDiaria(@PathVariable Long id, @RequestBody ProduccionDiariaRequest produccionDiariaDetails) {
+    @PutMapping
+    public ResponseEntity<?> updateProduccionDiaria(@RequestBody ProduccionDiariaRequest produccionDiariaDetails) {
         try{
-            ProduccionDiaria produccionDiaria = produccionDiariaService.getById(id);
+            ProduccionDiaria produccionDiaria = produccionDiariaService.getById(produccionDiariaDetails.getVacaId(), produccionDiariaDetails.getProduccionDate());
 
             produccionDiaria.getId().setProduccionDate(produccionDiariaDetails.getProduccionDate());
             produccionDiaria.setProduccionLiters(produccionDiariaDetails.getLiters());
@@ -64,10 +64,10 @@ public class ProduccionDiariaController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduccionDiaria(@PathVariable Long id) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteProduccionDiaria(@RequestBody ProduccionDiariaRequest pdr ) {
         try{
-            ProduccionDiaria pd = produccionDiariaService.getById(id);
+            ProduccionDiaria pd = produccionDiariaService.getById(pdr.getVacaId(), pdr.getProduccionDate());
 
             produccionDiariaRepository.delete(pd);
 
@@ -86,6 +86,5 @@ class ProduccionDiariaRequest {
     @NotNull(message = "El ID de la vaca no puede ser nulo")
     private Long vacaId;
 
-    @NotNull(message = "La cantidad de litros producidos no puede ser nula")
     private Double liters;
 }

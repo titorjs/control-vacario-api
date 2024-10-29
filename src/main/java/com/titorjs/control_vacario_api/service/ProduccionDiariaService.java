@@ -23,13 +23,17 @@ public class ProduccionDiariaService {
         return produccionDiariaRepository.findAll();
     }
 
-    public ProduccionDiaria getById(Long id) {
-        return produccionDiariaRepository.findById(id).orElseThrow(() -> new RuntimeException("Producción Diaria no encontrada"));
+    public ProduccionDiaria getById(Long vacaId, LocalDate producctionDate) {
+        return produccionDiariaRepository.findByIdProduccionDateAndIdVacaId(producctionDate, vacaId).orElseThrow(() -> new RuntimeException("Producción Diaria no encontrada"));
     }
 
     public ProduccionDiaria add(LocalDate produccionDate, Long vacaId, Double liters) {
         Vaca vaca = vacaRepository.findById(vacaId)
                 .orElseThrow(() -> new RuntimeException("Vaca no encontrada con ID: " + vacaId));
+
+        if (produccionDiariaRepository.findByIdProduccionDateAndIdVacaId(produccionDate, vacaId).isPresent()){
+            throw new RuntimeException("Producción Diaria ya está registrada, modifique el registro");
+        }
 
         ProduccionDiaria.ProduccionDiarioId produccionDiarioId = new ProduccionDiaria.ProduccionDiarioId();
         produccionDiarioId.setVaca(vaca);
@@ -38,6 +42,8 @@ public class ProduccionDiariaService {
         ProduccionDiaria produccionDiaria = new ProduccionDiaria();
         produccionDiaria.setId(produccionDiarioId);
         produccionDiaria.setProduccionLiters(liters);
+
+        produccionDiariaRepository.save(produccionDiaria);
 
         return produccionDiaria;
     }
