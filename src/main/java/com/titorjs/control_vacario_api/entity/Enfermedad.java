@@ -29,7 +29,7 @@ public class Enfermedad {
     @Column(name = "enfermedad_end")
     private LocalDate enfermedadEnd;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "enfermedad_remedio",
             joinColumns = @JoinColumn(name = "enfermedad_id"),
